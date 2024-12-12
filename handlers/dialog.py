@@ -3,6 +3,8 @@ from aiogram.filters import Command
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
 
+from bot_config import database
+
 
 opros_router = Router()
 
@@ -17,7 +19,7 @@ async def start_opros(message: types.Message, state: FSMContext):
     await state.set_state(Opros.name)
 
 @opros_router.message(Opros.name)
-async def start_opros(message: types.Message, state: FSMContext):
+async def process_name(message: types.Message, state: FSMContext):
     name = message.text
     print(name)
     await state.update_data(name=message.text)
@@ -25,7 +27,7 @@ async def start_opros(message: types.Message, state: FSMContext):
     await state.set_state(Opros.age)
 
 @opros_router.message(Opros.age)
-async def start_opros(message: types.Message, state: FSMContext):
+async def process_age(message: types.Message, state: FSMContext):
     age = message.text
     if not age.isdigit():
         await message.answer("Пожалуйста вводите только цифры")
@@ -39,9 +41,11 @@ async def start_opros(message: types.Message, state: FSMContext):
     await state.set_state(Opros.genre)
 
 @opros_router.message(Opros.genre)
-async def start_opros(message: types.Message, state: FSMContext):
+async def process_genre(message: types.Message, state: FSMContext):
     await state.update_data(genre=message.text)
     await message.answer("Спасибо за пройденный опрос")
     data = await state.get_data()
     print(data)
+    database.save_survey(data)
+    # остановка диалога
     await state.clear()
