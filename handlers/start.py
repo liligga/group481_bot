@@ -18,19 +18,29 @@ async def start_handler(message: types.Message):
                 types.InlineKeyboardButton(text="Наш сайт", url="https://geeks.kg"),
                 types.InlineKeyboardButton(text="Наш инстаграм", url="https://geeks.kg")
             ],
+            [
+                types.InlineKeyboardButton(text="Оставить отзыв", callback_data="review"),
+            ]
         ]
     )
+    print(message.from_user.id)
     await message.answer(f"Привет, {name}", reply_markup=kb)
     # await message.reply(f"Привет, {name}")
 
 
+@start_router.message(F.text == "привет")
+async def privet_handler(message: types.Message):
+    await message.answer("Ну привет")
+
+
 @start_router.callback_query(F.data == "about_us")
 async def about_us(callback: types.CallbackQuery):
+    print(callback.data)
     await callback.answer()
     await callback.message.answer("Текст о нас")
 
 
 @start_router.callback_query(F.data == "donate")
-async def about_us(callback: types.CallbackQuery):
+async def donation_handler(callback: types.CallbackQuery):
     await callback.answer()
     await callback.message.answer("Текст для сообщения о пожервовании")

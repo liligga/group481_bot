@@ -15,7 +15,7 @@ class Opros(StatesGroup):
 
 @opros_router.message(Command("opros"))
 async def start_opros(message: types.Message, state: FSMContext):
-    await message.answer("Как вам зовут?")
+    await message.answer("Как вас зовут?")
     await state.set_state(Opros.name)
 
 @opros_router.message(Opros.name)
@@ -28,6 +28,7 @@ async def process_name(message: types.Message, state: FSMContext):
 
 @opros_router.message(Opros.age)
 async def process_age(message: types.Message, state: FSMContext):
+
     age = message.text
     if not age.isdigit():
         await message.answer("Пожалуйста вводите только цифры")
@@ -36,14 +37,30 @@ async def process_age(message: types.Message, state: FSMContext):
     if age < 10 or age > 90:
         await message.answer("Укажите вохраст от 10 до 90")
         return
+    kb = types.ReplyKeyboardMarkup(
+        keyboard=[
+            [
+                types.KeyboardButton(text="Приключения"),
+                types.KeyboardButton(text="Фентези")
+            ],
+            [
+                types.KeyboardButton(text="Фантастика"),
+                types.KeyboardButton(text="Ужасы")
+            ],
+        ],
+        resize_keyboard=True,
+        input_field_placeholder="Выберите жанр"
+    )
     await state.update_data(age=message.text)
-    await message.answer("Укажите ваш любимый жанр?")
+    await message.answer("Укажите ваш любимый жанр?", reply_markup=kb)
     await state.set_state(Opros.genre)
 
 @opros_router.message(Opros.genre)
 async def process_genre(message: types.Message, state: FSMContext):
+    kb = types.ReplyKeyboardRemove()
+    print(message.text)
     await state.update_data(genre=message.text)
-    await message.answer("Спасибо за пройденный опрос")
+    await message.answer("Спасибо за пройденный опрос", reply_markup=kb)
     data = await state.get_data()
     print(data)
     database.save_survey(data)

@@ -12,7 +12,15 @@ class Database:
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     name TEXT,
                     age INTEGER,
-                    genre GENRE
+                    genre TEXT
+                )
+            """)
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS books (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT,
+                    price FLOAT,
+                    genre TEXT
                 )
             """)
             conn.commit()
@@ -25,6 +33,16 @@ class Database:
                 VALUES (?, ?, ?)
             """,
             (data["name"], data["age"], data["genre"])
+            )
+
+    def save_book(self, data: dict):
+         with sqlite3.connect(self.path) as conn:
+            conn.execute(
+            """
+                INSERT INTO books (name, price, genre)
+                VALUES (?, ?, ?)
+            """,
+            (data["name"], data["price"], data["genre"])
             )
 
 
