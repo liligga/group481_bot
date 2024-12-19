@@ -26,7 +26,7 @@ class Database:
             conn.commit()
 
     def save_survey(self, data: dict):
-         with sqlite3.connect(self.path) as conn:
+        with sqlite3.connect(self.path) as conn:
             conn.execute(
             """
                 INSERT INTO survey_results (name, age, genre)
@@ -36,7 +36,7 @@ class Database:
             )
 
     def save_book(self, data: dict):
-         with sqlite3.connect(self.path) as conn:
+        with sqlite3.connect(self.path) as conn:
             conn.execute(
             """
                 INSERT INTO books (name, price, genre)
@@ -44,5 +44,14 @@ class Database:
             """,
             (data["name"], data["price"], data["genre"])
             )
+
+    def get_all_books(self):
+        with sqlite3.connect(self.path) as conn:
+            result = conn.execute("SELECT * from books")
+            result.row_factory = sqlite3.Row
+            data = result.fetchall()
+            # data = result.fetchmany(10)
+
+            return [dict(row) for row in data]
 
 
