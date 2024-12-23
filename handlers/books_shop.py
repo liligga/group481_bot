@@ -16,6 +16,11 @@ async def show_all_books(message: types.Message):
     #     txt = f"Название: {book[1]}\nЦена: {book[2]}"
     #     await message.answer(txt)
     for book in book_list:
-        txt = f"Название: {book['name']}\nЦена: {book['price']}"
-        await message.answer(txt)
+        cover = book['cover']
+        print("Book cover", cover)
+        txt = f"Название: {book['name']}\nЦена: {book['price']}\nЖанр: {book['genre']}"
+        await message.answer_photo(
+            photo=cover,
+            caption=txt
+        )
 

@@ -18,8 +18,8 @@ async def main():
     # регистрация роутеров
     dp.include_router(start_router)
     dp.include_router(picture_router)
-    dp.include_router(opros_router)
     dp.include_router(book_management_router)
+    dp.include_router(opros_router)
     dp.include_router(shop_router)
 
     # в самом конце

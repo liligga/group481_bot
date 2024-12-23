@@ -20,6 +20,7 @@ class Database:
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     name TEXT,
                     price FLOAT,
+                    cover TEXT, 
                     genre TEXT
                 )
             """)
@@ -32,17 +33,17 @@ class Database:
                 INSERT INTO survey_results (name, age, genre)
                 VALUES (?, ?, ?)
             """,
-            (data["name"], data["age"], data["genre"])
+            (data["name"], data["age"],data["genre"])
             )
 
     def save_book(self, data: dict):
         with sqlite3.connect(self.path) as conn:
             conn.execute(
             """
-                INSERT INTO books (name, price, genre)
-                VALUES (?, ?, ?)
+                INSERT INTO books (name, price, cover, genre)
+                VALUES (?, ?, ?, ?)
             """,
-            (data["name"], data["price"], data["genre"])
+            (data["name"], data["price"], data["cover"], data["genre"])
             )
 
     def get_all_books(self):

@@ -1,6 +1,6 @@
 from aiogram import Router, F, types
 from aiogram.filters import Command
-from aiogram.fsm.state import StatesGroup, State
+from aiogram.fsm.state import StatesGroup, State, default_state
 from aiogram.fsm.context import FSMContext
 
 from bot_config import database
@@ -13,8 +13,18 @@ class Opros(StatesGroup):
     age = State()
     genre = State()
 
-@opros_router.message(Command("opros"))
+
+@opros_router.message(Command("stop"))
+@opros_router.message(F.text == "стоп")
+async def stop_dialog(message: types.Message, state: FSMContext):
+    print(message.text)
+    await state.clear()
+    await message.answer("Опрос остановлен")
+
+
+@opros_router.message(Command("opros"), default_state)
 async def start_opros(message: types.Message, state: FSMContext):
+    await message.answer("Для остановки введите слово 'стоп'")
     await message.answer("Как вас зовут?")
     await state.set_state(Opros.name)
 
