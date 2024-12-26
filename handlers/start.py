@@ -6,6 +6,7 @@ start_router = Router()
 
 @start_router.message(Command("start"))
 async def start_handler(message: types.Message):
+    print(message.chat.type)
     name = message.from_user.first_name
 
     kb = types.InlineKeyboardMarkup(

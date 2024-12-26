@@ -32,7 +32,6 @@ async def create_new_book(message: types.Message, state: FSMContext):
     await message.answer("Введите название книги?")
     await state.set_state(Book.name)
 
-
 @book_management_router.message(Book.name)
 async def process_name(message: types.Message, state: FSMContext):
     await state.update_data(name=message.text)
